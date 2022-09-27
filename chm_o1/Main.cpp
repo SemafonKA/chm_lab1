@@ -2,7 +2,7 @@
 // __ALL_FLOAT__     - все дробные числа и счётчики в float, 
 // __SEMI_FLOAT__    - все дробные числа в float, счётчики в double, 
 //__ALL_DOUBLE__     - все дробные числа и счётчики в double
-#define __ALL_DOUBLE__
+#define __SEMI_FLOAT__
 #include "predefined_types.h"
 #include "matrixIO.h"
 #include "profile_matrix_operations.h"
@@ -55,11 +55,6 @@ int main()
 
 #pragma endregion
 
-   PrintArray(matrixDiag, matrixSize, g_coutPrecision);
-   cout << endl;
-   PrintArray(vectorB, matrixSize, g_coutPrecision);
-   cout << endl;
-
    try {
       GetMatrixL(matrixSize, matrixDiag, matrixAL, matrixIA);
 
@@ -78,7 +73,7 @@ int main()
       PrintArray(vectorB, matrixSize, g_coutPrecision);
       cout << endl;
 
-      auto outputFilePath = "./output/k_14_" + g_outputFileName;
+      auto outputFilePath = g_outputFileName;
       auto outputFile = ofstream(outputFilePath);
       PrintArray(vectorB, matrixSize, g_coutPrecision, outputFile);
       outputFile.close();
