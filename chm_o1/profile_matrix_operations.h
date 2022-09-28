@@ -5,38 +5,53 @@
 
 // Функция преобразует вектор y в вектор x (перезаписывает элементы!)
 void GetVectorX(size_t _size, real_t* _matrixDiag, real_t* _matrixL, size_t* _matrixIA, real_t* _vecB) {
+   size_t counter = 0;
+
    // Сначала отдельно считаем последний элемент
    _vecB[_size - 1] /= _matrixDiag[_size - 1];
-
+   counter++;/////
 
    for (size_t j = _size - 1; j > 0; j--) {
       // Вычитаем все элементы, содержащие x_j
       size_t jColFirstInd = j - _matrixIA[j + 1] + _matrixIA[j];
       for (size_t i = jColFirstInd; i < j; i++) {
+         counter += 2;/////
          _vecB[i] -= _vecB[j] * _matrixL[_matrixIA[j] + i - jColFirstInd];
       }
 
       // Высчитываем следующий x_j (x_(j-1))
+      counter++;/////
       _vecB[j - 1] /= _matrixDiag[j - 1];
    }
+
+   std::cout << "При получении Х: " << counter << std::endl;
 }
 
 // Функция преобразует вектор b в вектор y (перезаписывает элементы!)
 void GetVectorY(size_t _size, real_t* _matrixDiag, real_t* _matrixL, size_t* _matrixIA, real_t* _vecB) {
+   size_t counter = 0;/////
+
    for (size_t i = 0; i < _size; i++) {
       accum_t accum = 0.0;
       size_t iStrFirstInd = i - _matrixIA[i + 1] + _matrixIA[i];
       for (size_t j = iStrFirstInd; j < i; j++) {
+         counter += 2;/////
          accum += _matrixL[_matrixIA[i] + j - iStrFirstInd] * _vecB[j];
       }
+      counter += 2;/////
       _vecB[i] = (_vecB[i] - accum) / _matrixDiag[i];
    }
+
+   std::cout << "При получении Y: " << counter << std::endl;
 }
 
 // Функция преобразует переданную матрицу в матрицу L (перезаписывает элементы!)
 void GetMatrixL(size_t _size, real_t* _matrixDiag, real_t* _matrixAL, size_t* _matrixIA) {
-   _matrixDiag[0] = std::sqrt(_matrixDiag[0]);     // Находим отдельно первый элемент
+   size_t counter = 0;/////
 
+
+   _matrixDiag[0] = std::sqrt(_matrixDiag[0]);     // Находим отдельно первый элемент
+   counter++;/////
    accum_t accum = 0.0;
    for (size_t i = 1; i < _size; i++) {
       // Находим все элементы i-ой строки до диагонального элемента
@@ -48,8 +63,10 @@ void GetMatrixL(size_t _size, real_t* _matrixDiag, real_t* _matrixAL, size_t* _m
          accum = 0.0;
          // k выбираем как максимальный начальный индекс для двух строк
          for (size_t k = std::max(iStrFirstInd, jStrFirstInd); k < j; k++) {
+            counter+=2;/////
             accum += _matrixAL[_matrixIA[i] + k - iStrFirstInd] * _matrixAL[_matrixIA[j] + k - jStrFirstInd];
          }
+         counter+=2;/////
          _matrixAL[jElemInd] = (_matrixAL[jElemInd] - accum) / _matrixDiag[j];
       }
 
@@ -57,6 +74,7 @@ void GetMatrixL(size_t _size, real_t* _matrixDiag, real_t* _matrixAL, size_t* _m
       accum = 0.0;
       for (size_t k = _matrixIA[i]; k < _matrixIA[i + 1]; k++) {
          accum += _matrixAL[k] * _matrixAL[k];
+         counter += 2;/////
       }
       // Если пошли мнимые корни
       if (accum > _matrixDiag[i]) {
@@ -69,9 +87,12 @@ void GetMatrixL(size_t _size, real_t* _matrixDiag, real_t* _matrixAL, size_t* _m
          throw std::exception("Illegal matrix.");
       }
       else {
+         counter += 2;/////
          _matrixDiag[i] = std::sqrt(_matrixDiag[i] - accum);  // Находим i-ый диагональный элемент
       }
    }
+
+   std::cout << "При переводе в L: " << counter << std::endl;
 }
 
 // Функция перемножения LLt (работает некорректно, переделать)
