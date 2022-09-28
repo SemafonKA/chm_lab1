@@ -2,7 +2,7 @@
 // __ALL_FLOAT__     - все дробные числа и счётчики в float, 
 // __SEMI_FLOAT__    - все дробные числа в float, счётчики в double, 
 //__ALL_DOUBLE__     - все дробные числа и счётчики в double
-#define __SEMI_FLOAT__
+#define __ALL_FLOAT__
 #include "predefined_types.h"
 #include "matrixIO.h"
 #include "profile_matrix_operations.h"
