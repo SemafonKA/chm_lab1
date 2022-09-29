@@ -81,8 +81,6 @@ void PrintMatrixVector(matrix_t& matrix, vec_t& vecB) {
 }
 
 void SlauSolve(matrix_t& matrix, vec_t& b, vec_t& x) {
-   size_t counter = 0;/////
-
    // Прямой ход (приведение к треугольному виду)
    for (size_t i = 0; i < matrix.size(); i++) {
       // выбираем максимальный элемент в i-ом столбце под i-ой строкой
@@ -99,34 +97,28 @@ void SlauSolve(matrix_t& matrix, vec_t& b, vec_t& x) {
       if (maxElemInd != i) {
          swap(matrix[i], matrix[maxElemInd]);
          swap(b[i], b[maxElemInd]);
-         counter++;/////
       }
 
       // Приводим все нижележащие строки к виду, когда i-ый столбец равен нулю
       for (size_t k = i + 1; k < matrix.size(); k++) {
          real_t multCoef = matrix[k][i] / matrix[i][i];
-         counter++;/////
          if (!IsAlmostEq(multCoef, 0)) {
             for (size_t j = i; j < matrix.size(); j++) {
                real_t num = matrix[i][j] * multCoef;
-               counter++;/////
                if (IsAlmostEq(matrix[k][j], num)) {
                   matrix[k][j] = 0;
                }
                else {
                   matrix[k][j] -= num;
                }
-               counter++;/////
             }
             real_t num = b[i] * multCoef;
-            counter++;/////
             if (IsAlmostEq(b[k], num)) {
                b[k] = 0;
             }
             else {
                b[k] -= num;
             }
-            counter++;/////
          }
       }
    }
@@ -142,14 +134,9 @@ void SlauSolve(matrix_t& matrix, vec_t& b, vec_t& x) {
       accum_t accum = 0.0;
       for (size_t j = i + 1; j < matrix.size(); j++) {
          accum += matrix[i][j] * x[j];
-         counter += 2;/////
       }
       x[i] = (b[i] - accum) / matrix[i][i];
-      counter += 2;/////
    }
-
-
-   cout << "На гауссе: " << counter << endl;
 }
 
 int main() {

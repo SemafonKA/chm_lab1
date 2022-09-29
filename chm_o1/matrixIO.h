@@ -52,12 +52,6 @@ void PrintArray(const T* _arr, const size_t _size, const int precision = 7, std:
    _out.precision(precision);
    _out.setf(std::ios_base::fixed);
 
-   //_out << "[ ";
-   //for (int i = 0; i < _size - 1; i++)
-   //{
-   //   _out << _arr[i] << ", ";
-   //}
-   //_out << _arr[_size - 1] << " ]";
    for (int i = 0; i < _size; i++) {
       _out << _arr[i] << std::endl;
    }

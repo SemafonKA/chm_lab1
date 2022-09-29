@@ -3,24 +3,24 @@
 #include <string>
 
 #ifdef __ALL_FLOAT__
-using real_t = float;
-using accum_t = float;
-constexpr real_t g_eps = FLT_EPSILON * 10.0;
-constexpr int g_coutPrecision = 7;
-const std::string g_outputFileName = "allFloatOutput.txt";
-#else 
-   #ifdef __SEMI_FLOAT__
    using real_t = float;
-   using accum_t = double;
+   using accum_t = float;
    constexpr real_t g_eps = FLT_EPSILON * 10.0;
    constexpr int g_coutPrecision = 7;
-   const std::string g_outputFileName = "scalarDoubleOutput.txt";
+   const std::string g_outputFileName = "allFloatOutput.txt";
+#else 
+   #ifdef __SEMI_FLOAT__
+      using real_t = float;
+      using accum_t = double;
+      constexpr real_t g_eps = FLT_EPSILON * 10.0;
+      constexpr int g_coutPrecision = 7;
+      const std::string g_outputFileName = "scalarDoubleOutput.txt";
    #else // __ALL_DOUBLE__
-   using real_t = double;
-   using accum_t = double;
-   constexpr real_t g_eps = DBL_EPSILON * 10.0;
-   constexpr int g_coutPrecision = 15;
-   const std::string g_outputFileName = "allDoubleOutput.txt";
+      using real_t = double;
+      using accum_t = double;
+      constexpr real_t g_eps = DBL_EPSILON * 10.0;
+      constexpr int g_coutPrecision = 15;
+      const std::string g_outputFileName = "allDoubleOutput.txt";
    #endif 
 #endif
 
