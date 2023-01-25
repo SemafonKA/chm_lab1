@@ -1,7 +1,7 @@
-// Выбор точности работы программы:
-// __ALL_FLOAT__     - все дробные числа и счётчики в float, 
-// __SEMI_FLOAT__    - все дробные числа в float, счётчики в double, 
-//__ALL_DOUBLE__     - все дробные числа и счётчики в double
+// Р’С‹Р±РѕСЂ С‚РѕС‡РЅРѕСЃС‚Рё СЂР°Р±РѕС‚С‹ РїСЂРѕРіСЂР°РјРјС‹:
+// __ALL_FLOAT__     - РІСЃРµ РґСЂРѕР±РЅС‹Рµ С‡РёСЃР»Р° Рё СЃС‡С‘С‚С‡РёРєРё РІ float, 
+// __SEMI_FLOAT__    - РІСЃРµ РґСЂРѕР±РЅС‹Рµ С‡РёСЃР»Р° РІ float, СЃС‡С‘С‚С‡РёРєРё РІ double, 
+//__ALL_DOUBLE__     - РІСЃРµ РґСЂРѕР±РЅС‹Рµ С‡РёСЃР»Р° Рё СЃС‡С‘С‚С‡РёРєРё РІ double
 #define __ALL_DOUBLE__
 #include "predefined_types.h"
 
@@ -54,14 +54,14 @@ void GetMatrixFromProfile(matrix_t& matrix) {
    GetVectorFromFile(matrixAL, alFilePath);
    GetVectorFromFile(matrixAU, auFilePath);
 
-   // Заполняем саму матрицу + диагональ
+   // Р—Р°РїРѕР»РЅСЏРµРј СЃР°РјСѓ РјР°С‚СЂРёС†Сѓ + РґРёР°РіРѕРЅР°Р»СЊ
    matrix.resize(size);
    for (size_t i = 0; i < size; i++) {
       matrix[i].resize(size);
       matrix[i][i] = matrixDiag[i];
    }
 
-   //Заполняем верхний и нижний треугольники
+   //Р—Р°РїРѕР»РЅСЏРµРј РІРµСЂС…РЅРёР№ Рё РЅРёР¶РЅРёР№ С‚СЂРµСѓРіРѕР»СЊРЅРёРєРё
    for (size_t i = 0; i < size; i++) {
       size_t iStrFirstInd = i - matrixIA[i + 1] + matrixIA[i];
       for (size_t j = iStrFirstInd, k = matrixIA[i]; k < matrixIA[i + 1]; k++, j++) {
@@ -81,25 +81,25 @@ void PrintMatrixVector(matrix_t& matrix, vec_t& vecB) {
 }
 
 void SlauSolve(matrix_t& matrix, vec_t& b, vec_t& x) {
-   // Прямой ход (приведение к треугольному виду)
+   // РџСЂСЏРјРѕР№ С…РѕРґ (РїСЂРёРІРµРґРµРЅРёРµ Рє С‚СЂРµСѓРіРѕР»СЊРЅРѕРјСѓ РІРёРґСѓ)
    for (size_t i = 0; i < matrix.size(); i++) {
-      // выбираем максимальный элемент в i-ом столбце под i-ой строкой
+      // РІС‹Р±РёСЂР°РµРј РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚ РІ i-РѕРј СЃС‚РѕР»Р±С†Рµ РїРѕРґ i-РѕР№ СЃС‚СЂРѕРєРѕР№
       size_t maxElemInd = i;
       real_t maxElem = abs(matrix[i][i]);
       for (size_t k = i + 1; k < matrix.size(); k++) {
          if (abs(matrix[k][i]) > maxElem) {
             maxElem = abs(matrix[k][i]);
-            maxElemInd = k;
+            maxElemInd = k;   
          }
       }
 
-      // Если элемент находится в другой строке, то меняем строки местами, а также меняем элементы в b местами
+      // Р•СЃР»Рё СЌР»РµРјРµРЅС‚ РЅР°С…РѕРґРёС‚СЃСЏ РІ РґСЂСѓРіРѕР№ СЃС‚СЂРѕРєРµ, С‚Рѕ РјРµРЅСЏРµРј СЃС‚СЂРѕРєРё РјРµСЃС‚Р°РјРё, Р° С‚Р°РєР¶Рµ РјРµРЅСЏРµРј СЌР»РµРјРµРЅС‚С‹ РІ b РјРµСЃС‚Р°РјРё
       if (maxElemInd != i) {
          swap(matrix[i], matrix[maxElemInd]);
          swap(b[i], b[maxElemInd]);
       }
 
-      // Приводим все нижележащие строки к виду, когда i-ый столбец равен нулю
+      // РџСЂРёРІРѕРґРёРј РІСЃРµ РЅРёР¶РµР»РµР¶Р°С‰РёРµ СЃС‚СЂРѕРєРё Рє РІРёРґСѓ, РєРѕРіРґР° i-С‹Р№ СЃС‚РѕР»Р±РµС† СЂР°РІРµРЅ РЅСѓР»СЋ
       for (size_t k = i + 1; k < matrix.size(); k++) {
          real_t multCoef = matrix[k][i] / matrix[i][i];
          if (!IsAlmostEq(multCoef, 0)) {
@@ -123,11 +123,11 @@ void SlauSolve(matrix_t& matrix, vec_t& b, vec_t& x) {
       }
    }
 
-   // Обратный ход (получение векторов x)
+   // РћР±СЂР°С‚РЅС‹Р№ С…РѕРґ (РїРѕР»СѓС‡РµРЅРёРµ РІРµРєС‚РѕСЂРѕРІ x)
    for (size_t i = matrix.size(); i > 0;) {
-      i--; // Во избежания проблем с условием цикла (i всегда >= 0, поэтому выходил вечный цикл), вынес декремент сюда
+      i--; // Р’Рѕ РёР·Р±РµР¶Р°РЅРёСЏ РїСЂРѕР±Р»РµРј СЃ СѓСЃР»РѕРІРёРµРј С†РёРєР»Р° (i РІСЃРµРіРґР° >= 0, РїРѕСЌС‚РѕРјСѓ РІС‹С…РѕРґРёР» РІРµС‡РЅС‹Р№ С†РёРєР»), РІС‹РЅРµСЃ РґРµРєСЂРµРјРµРЅС‚ СЃСЋРґР°
       if (IsAlmostEq(matrix[i][i], 0.0)) {
-         cout << "В данной СЛАУ присутствуют свободные коэффициенты. Проверьте её на корректность" << endl;
+         cout << "Р’ РґР°РЅРЅРѕР№ РЎР›РђРЈ РїСЂРёСЃСѓС‚СЃС‚РІСѓСЋС‚ СЃРІРѕР±РѕРґРЅС‹Рµ РєРѕСЌС„С„РёС†РёРµРЅС‚С‹. РџСЂРѕРІРµСЂСЊС‚Рµ РµС‘ РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ" << endl;
          throw exception("Illegal matrix: free coefs");
       }
 
@@ -160,7 +160,7 @@ int main() {
       return -1;
    }
 
-   cout << "Полученный вектор X: " << endl;
+   cout << "РџРѕР»СѓС‡РµРЅРЅС‹Р№ РІРµРєС‚РѕСЂ X: " << endl;
    auto vectorxFile = ofstream(g_outputFileName);
    for (auto& elem : vecX) {
       auto ss = format("{0:.{1}f}\n", elem, g_coutPrecision);

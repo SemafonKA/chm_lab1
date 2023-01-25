@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
    int matrixSize = 0;
 
    if (argc < 2) {
-      cout << "Ââåäèòå ðàçìåð ìàòðèöû: ";
+      cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ€Ð°Ð·Ð¼ÐµÑ€ Ð¼Ð°Ñ‚Ñ€Ð¸Ñ†Ñ‹: ";
       cin >> matrixSize;
    }
    else {
